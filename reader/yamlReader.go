@@ -1,9 +1,9 @@
 package reader
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
+
 	"github.com/floge77/cloud2podcastnew/model"
 	"gopkg.in/yaml.v2"
 )
@@ -11,13 +11,13 @@ import (
 type YamlReader struct {
 }
 
-func (*YamlReader) GetConfig(yamlPath string) PodcastConfigYaml {
-	config := PodcastConfigYaml{}
-	config = ReadYamlfile(yamlPath, config)
-	return config
+func (*YamlReader) GetConfig(configYamlPath string) *model.PodcastConfigYaml {
+	config := model.PodcastConfigYaml{}
+	config = readYamlfile(configYamlPath, config)
+	return &config
 }
 
-func readYamlfile(filePath string, config PodcastConfigYaml) PodcastConfigYaml {
+func readYamlfile(filePath string, config model.PodcastConfigYaml) model.PodcastConfigYaml {
 
 	yamlFile, err := ioutil.ReadFile(filePath)
 	if err != nil {
@@ -28,6 +28,5 @@ func readYamlfile(filePath string, config PodcastConfigYaml) PodcastConfigYaml {
 	if err != nil {
 		log.Fatalf("error: %v", err)
 	}
-	fmt.Printf("--- m:\n%v\n\n", config)
 	return config
 }

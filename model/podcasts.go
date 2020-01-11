@@ -8,7 +8,7 @@ type PodcastItem struct {
 	ReleaseDate              *time.Time
 }
 
-type Podcastinfo struct {
+type PodcastInfo struct {
 	Channel               string `yaml:"channelName"`
 	ChannelURL            string `yaml:"channelURL"`
 	ChannelImageURL       string `yaml:"channelImageURL"`
@@ -18,13 +18,17 @@ type Podcastinfo struct {
 	Items                 []*PodcastItem
 }
 
+type Podcast struct {
+	Channel               string `yaml:"channelName"`
+	ChannelURL            string `yaml:"channelURL"`
+	ChannelImageURL       string `yaml:"channelImageURL"`
+	PlaylistToDownloadURL string `yaml:"playlistToDownloadURL"`
+	Items                 []*PodcastItem
+}
+
 type PodcastConfigYaml struct {
-	minLength int `yaml:"minLength"`
-	Podcasts  []struct {
-		Channel               string `yaml:"channelName"`
-		ChannelURL            string `yaml:"channelURL"`
-		ChannelImageURL       string `yaml:"channelImageURL"`
-		PlaylistToDownloadURL string `yaml:"playlistToDownloadURL"`
-		Items                 []*PodcastItem
-	} `yaml:"podcasts"`
+	MinLength         int `yaml:"minLength"`
+	DownloadDirectory string
+	Port              string
+	Podcasts          []*Podcast `yaml:"podcasts"`
 }
