@@ -10,15 +10,18 @@ import (
 	"path"
 
 	"github.com/eduncan911/podcast"
+	"github.com/floge77/cloud2podcastnew/fileUtils"
 	"github.com/floge77/cloud2podcastnew/model"
-	"github.com/floge77/cloud2podcastnew/reader"
 	"github.com/gorilla/mux"
 )
 
-func ServeAllPodcasts(router *mux.Router, config *model.PodcastConfigYaml) {
-	dirs, err := ioutil.ReadDir(config.DownloadDirectory)
+func ServeAllPodcasts(router *mux.Router, configYamlPath string, downloadDirectory string, port string) {
+	yamlReader := fileUtils.YamlReader{}
+	config := yamlReader.GetConfig(configYamlPath)
+
+	dirs, err := ioutil.ReadDir(downloadDirectory)
 	if err != nil {
-		log.Fatalf("Could not read %v. Error: %v", config.DownloadDirectory, err)
+		log.Fatalf("Could not read %v. Error: %v", downloadDirectory, err)
 	}
 	for _, dir := range dirs {
 		if dir.IsDir() {
@@ -27,41 +30,35 @@ func ServeAllPodcasts(router *mux.Router, config *model.PodcastConfigYaml) {
 			podcastInfo := &model.PodcastInfo{
 				Channel: dir.Name(),
 			}
+			addConfigInfo(podcastInfo, config, dir.Name())
+			addAllPodcastItemsToPodcastFeed(podcastInfo, config, downloadDirectory, dir.Name())
+			podcastFeed := buildPodcastFeed(podcastInfo, port, dir.Name())
 
-			for _, podcast := range config.Podcasts {
-				if podcast.Channel == dir.Name() {
-					podcastInfo.ChannelURL = podcast.ChannelURL
-					podcastInfo.ChannelImageURL = podcast.ChannelImageURL
-					podcastInfo.PlaylistToDownloadURL = podcast.PlaylistToDownloadURL
-				}
-			}
-			fileReader := reader.FileInfoExtractor{}
-			podcastInfo.Items, err = fileReader.GetPodcastItemsInformationForDir(config.DownloadDirectory + dir.Name())
-			if err != nil {
-				log.Fatal("Could not read item infos")
-			}
-			fmt.Println(podcastInfo)
-
-			podcastToServe := getInitializedPodcast(podcastInfo)
-			// hostName := os.Hostname()
-			hostIP := os.Getenv("HOST_IP")
-			for _, item := range podcastInfo.Items {
-				downloadURL := &url.URL{
-					Scheme: "http",
-					Host:   hostIP + ":" + config.Port,
-					Path:   path.Join("downloads", dir.Name(), item.FileName),
-				}
-
-				// "http://" + hostIP + ":" + config.Port + dir.Name() + "/"
-				appendPodcastItem(podcastToServe, item, downloadURL)
-			}
-			handlerFunc := handleSinglePodcast(podcastToServe)
+			handlerFunc := handleSinglePodcast(podcastFeed)
 			router.HandleFunc("/"+dir.Name(), handlerFunc).Methods("GET")
-			fmt.Println(podcastToServe)
 		}
 
 	}
 
+}
+
+func addConfigInfo(podcastInfo *model.PodcastInfo, config *model.PodcastConfigYaml, dir string) {
+	for _, podcast := range config.Podcasts {
+		if podcast.Channel == dir {
+			podcastInfo.ChannelURL = podcast.ChannelURL
+			podcastInfo.ChannelImageURL = podcast.ChannelImageURL
+			podcastInfo.PlaylistToDownloadURL = podcast.PlaylistToDownloadURL
+		}
+	}
+}
+
+func addAllPodcastItemsToPodcastFeed(podcastInfo *model.PodcastInfo, config *model.PodcastConfigYaml, downloadDirectory string, dir string) {
+	var err error
+	fileReader := fileUtils.FileInfoExtractor{}
+	podcastInfo.Items, err = fileReader.GetPodcastItemsInformationForDir(downloadDirectory + dir)
+	if err != nil {
+		log.Fatal("Could not read item infos")
+	}
 }
 
 func getInitializedPodcast(podcastInfo *model.PodcastInfo) *podcast.Podcast {
@@ -82,6 +79,23 @@ func getInitializedPodcast(podcastInfo *model.PodcastInfo) *podcast.Podcast {
 	p.AddAuthor(channel, channel+"@email.com")
 
 	return &p
+}
+
+func buildPodcastFeed(podcastInfo *model.PodcastInfo, port string, dir string) *podcast.Podcast {
+	podcastToServe := getInitializedPodcast(podcastInfo)
+	// hostName := os.Hostname()
+	hostIP := os.Getenv("HOST_IP")
+	for _, item := range podcastInfo.Items {
+		downloadURL := &url.URL{
+			Scheme: "http",
+			Host:   hostIP + ":" + port,
+			Path:   path.Join("downloads", dir, item.FileName),
+		}
+
+		// "http://" + hostIP + ":" + config.Port + dir.Name() + "/"
+		appendPodcastItem(podcastToServe, item, downloadURL)
+	}
+	return podcastToServe
 }
 
 func appendPodcastItem(podcastToAppend *podcast.Podcast, itemToAdd *model.PodcastItem, downloadURL *url.URL) {

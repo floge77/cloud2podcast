@@ -7,35 +7,27 @@ import (
 	"os"
 	"time"
 
-	"github.com/floge77/cloud2podcastnew/reader"
 	"github.com/gorilla/mux"
 )
 
 func Run() {
 
-	yamlReader := reader.YamlReader{}
-	var configYamlPath string
-	configYamlPath = os.Getenv("configYaml")
+	configYamlPath := os.Getenv("configYaml")
 	if configYamlPath == "" {
 		configYamlPath = "/downloads/config.yaml"
 	}
 
-	config := yamlReader.GetConfig(configYamlPath)
 	downloadDirectory := os.Getenv("downloadDir")
 	if downloadDirectory == "" {
 		downloadDirectory = "/downloads/"
 	}
-	config.DownloadDirectory = downloadDirectory + "/"
-	fmt.Println(downloadDirectory)
-	fmt.Println(config.Podcasts[0])
 
 	router := mux.NewRouter()
 	port := "8080"
 
-	config.Port = port
-
 	router.PathPrefix("/downloads/").Handler(http.StripPrefix("/downloads/", http.FileServer(http.Dir(downloadDirectory+"/"))))
-	ServeAllPodcasts(router, config)
+	ServeAllPodcasts(router, configYamlPath, downloadDirectory+"/", port)
+	ServePodcastInfo(router, configYamlPath)
 
 	server := &http.Server{
 		Handler: router,
