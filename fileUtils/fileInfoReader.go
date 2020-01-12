@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/floge77/cloud2podcastnew/model"
+	"github.com/floge77/cloud2podcast/model"
 )
 
 type FileInfoExtractor struct {

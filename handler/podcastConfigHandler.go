@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/floge77/cloud2podcastnew/fileUtils"
-	"github.com/floge77/cloud2podcastnew/model"
+	"github.com/floge77/cloud2podcast/fileUtils"
+	"github.com/floge77/cloud2podcast/model"
 	"github.com/gorilla/mux"
 )
 

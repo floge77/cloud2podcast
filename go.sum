@@ -2,6 +2,8 @@ github.com/eduncan911/podcast v1.3.0 h1:lVCar1J39mMNWR2SbGzPjeUbCKEkQ6/pt/7beQqK
 github.com/eduncan911/podcast v1.3.0/go.mod h1:C7Q04QZtv7LW/1X67mc1zwsktpZ68kbxsUS3CYWniJg=
 github.com/floge77/cloud2podcast v0.0.0-20190526161023-dbd963cf7546 h1:X/vKhJnivapR72j10jrs/geIu3Ch8vf5/4j2lELfiKA=
 github.com/floge77/cloud2podcast v0.0.0-20190526161023-dbd963cf7546/go.mod h1:BBGPWm6l8CVsKpL6YJrvJ4mTudUlvtjR4vQXPx4ALDw=
+github.com/floge77/cloud2podcast v0.0.0-20200112151117-e18619b4d405 h1:ZUpVOsW5M7+h8MXgImPLOwq1bF81qwypc/9CEtmb6+Y=
+github.com/floge77/cloud2podcast v0.0.0-20200112151117-e18619b4d405/go.mod h1:/XjABFg7ZIc6yixa51Vz+UvYmyEMO0qoTU79z5nB2/c=
 github.com/gorilla/mux v1.7.3 h1:gnP5JzjVOuiZD07fKKToCAOjS0yOpj/qPETTXCCS6hw=
 github.com/gorilla/mux v1.7.3/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
 github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=

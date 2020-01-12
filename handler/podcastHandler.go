@@ -11,8 +11,8 @@ import (
 	"path"
 
 	"github.com/eduncan911/podcast"
-	"github.com/floge77/cloud2podcastnew/fileUtils"
-	"github.com/floge77/cloud2podcastnew/model"
+	"github.com/floge77/cloud2podcast/fileUtils"
+	"github.com/floge77/cloud2podcast/model"
 	"github.com/gorilla/mux"
 )
 

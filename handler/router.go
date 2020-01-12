@@ -21,9 +21,12 @@ func Run() {
 	if downloadDirectory == "" {
 		downloadDirectory = "/downloads/"
 	}
+	port := os.Getenv("port")
+	if port == "" {
+		port = "8080"
+	}
 
 	router := mux.NewRouter()
-	port := "8080"
 
 	// router.Handle("/public", http.FileServer(http.Dir("frontend/")))
 	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("frontend/"))))

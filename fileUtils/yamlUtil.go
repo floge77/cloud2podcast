@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 
-	"github.com/floge77/cloud2podcastnew/model"
+	"github.com/floge77/cloud2podcast/model"
 	"gopkg.in/yaml.v2"
 )
 
