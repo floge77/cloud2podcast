@@ -24,22 +24,23 @@ func Run() {
 	port := os.Getenv("port")
 	if port == "" {
 		port = "8080"
+	} else if port == "80" {
+		port = ""
 	}
 
 	router := mux.NewRouter()
 
-	// router.Handle("/public", http.FileServer(http.Dir("frontend/")))
 	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("frontend/"))))
 	router.PathPrefix("/downloads/").Handler(http.StripPrefix("/downloads/", http.FileServer(http.Dir(downloadDirectory+"/"))))
 	ServeAllPodcasts(router, configYamlPath, downloadDirectory+"/", port)
 	ServePodcastInfo(router, configYamlPath)
 	router.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hi there, I love")
+		fmt.Fprintf(w, "pong")
 	})
 
 	server := &http.Server{
 		Handler: router,
-		Addr:    "localhost:" + port,
+		Addr:    ":" + "8080",
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
@@ -47,5 +48,4 @@ func Run() {
 
 	fmt.Println("Router running at Port " + port)
 	log.Fatal(server.ListenAndServe())
-
 }
