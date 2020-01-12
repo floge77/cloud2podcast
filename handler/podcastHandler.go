@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -35,11 +36,10 @@ func ServeAllPodcasts(router *mux.Router, configYamlPath string, downloadDirecto
 			podcastFeed := buildPodcastFeed(podcastInfo, port, dir.Name())
 
 			handlerFunc := handleSinglePodcast(podcastFeed)
-			router.HandleFunc("/"+dir.Name(), handlerFunc).Methods("GET")
+			router.HandleFunc("/podcasts/"+dir.Name(), handlerFunc).Methods("GET")
 		}
-
 	}
-
+	router.HandleFunc("/availablePodcasts", handleAvailablePodcasts(dirs)).Methods("GET")
 }
 
 func addConfigInfo(podcastInfo *model.PodcastInfo, config *model.PodcastConfigYaml, dir string) {
@@ -127,5 +127,18 @@ func handleSinglePodcast(podcast *podcast.Podcast) func(http.ResponseWriter, *ht
 		if err := podcast.Encode(w); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
+	}
+}
+
+func handleAvailablePodcasts(dirs []os.FileInfo) func(http.ResponseWriter, *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var podcastURIs []string
+		for _, dir := range dirs {
+			if dir.IsDir() {
+				podcastURIs = append(podcastURIs, "/"+dir.Name())
+			}
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(podcastURIs)
 	}
 }

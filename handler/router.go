@@ -25,6 +25,8 @@ func Run() {
 	router := mux.NewRouter()
 	port := "8080"
 
+	// router.Handle("/public", http.FileServer(http.Dir("frontend/")))
+	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("frontend/"))))
 	router.PathPrefix("/downloads/").Handler(http.StripPrefix("/downloads/", http.FileServer(http.Dir(downloadDirectory+"/"))))
 	ServeAllPodcasts(router, configYamlPath, downloadDirectory+"/", port)
 	ServePodcastInfo(router, configYamlPath)
