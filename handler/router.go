@@ -33,10 +33,13 @@ func Run() {
 	router.PathPrefix("/downloads/").Handler(http.StripPrefix("/downloads/", http.FileServer(http.Dir(downloadDirectory+"/"))))
 	ServeAllPodcasts(router, configYamlPath, downloadDirectory+"/", port)
 	ServePodcastInfo(router, configYamlPath)
+	router.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Hi there, I love")
+	})
 
 	server := &http.Server{
 		Handler: router,
-		Addr:    "127.0.0.1:" + port,
+		Addr:    "localhost:" + port,
 		// Good practice: enforce timeouts for servers you create!
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
