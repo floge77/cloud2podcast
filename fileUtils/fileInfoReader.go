@@ -1,6 +1,7 @@
 package fileUtils
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -61,5 +62,8 @@ func (*FileInfoExtractor) readDir(dirname string) (list []string, err error) {
 	}
 	defer file.Close()
 	list, err = file.Readdirnames(0) // 0 to read all files and folders
+	if err != nil {
+		fmt.Printf("Could not read directory %v", dirname)
+	}
 	return
 }

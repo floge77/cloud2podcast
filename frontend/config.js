@@ -9,9 +9,15 @@ feed = `[{"Channel":"Q-Dance-Youtube","ChannelURL":"https://www.youtube.com/user
 //   }
 // ];
 
+/**
+ * Frontend should be able to:
+ * display complete config / get
+ * edit single entry / put
+ * add new entries (enforce all 4 values when adding) / post
+ */
+
 js = JSON.parse(feed);
 
 for (i in js) {
   console.log(js[i]);
 }
-

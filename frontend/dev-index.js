@@ -41,7 +41,7 @@ function getPodcastXMLFeed(podcast) {
 
 function displayPodcastsInHtml(podcastInfo) {
   document.getElementById("podcastList").innerHTML += `<li class="media">
-  <img src=${podcastInfo.imageURL} class="align-self-center mr-3" alt="...">
+  <img src=${podcastInfo.imageURL} class="align-self-center mr-3 img-fluid" alt="...">
   <div class="media-body">
     <h5 class="mt-0">${podcastInfo.title}</h5>
     <h7>Subscribe at:</h7>
