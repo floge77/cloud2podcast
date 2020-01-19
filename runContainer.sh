@@ -2,4 +2,4 @@
 
 IP=`ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1'`
 echo $IP
-docker run --rm --name cloud2podcast -p 8080:8080 -v /Users/floriangeckeler/Development/cloud2podcast/test/:/downloads -e HOST_IP=localhost -it floge77/cloud2podcast
+docker run --rm --name cloud2podcast -p 8080:8080 -v $HOME/Development/cloud2podcast/test:/downloads -e HOST_IP=localhost -it floge77/cloud2podcast
