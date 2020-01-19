@@ -6,7 +6,7 @@ RUN apk update && apk add --update nodejs npm git
 WORKDIR /cloud2podcast
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build  -o /go/bin/cloud2podcast
-RUN cd frontend && npm install
+RUN cd frontend && npm install && npm run build
 
 # Build small sratch image
 FROM scratch
