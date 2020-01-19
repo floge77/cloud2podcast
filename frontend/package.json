@@ -4,11 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev-script": "browserify dev-index.js -o index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.1"
+  },
+  "devDependencies": {
+    "browserify": "^16.5.0"
   }
 }
