@@ -1,6 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
+import { ThemeProvider } from "@chakra-ui/core";
+import customTheme from "./theme";
+
 function App() {
   return (
     <Router>
@@ -17,4 +20,10 @@ function App() {
 const Home = () => "Home";
 const Config = () => "Config";
 
-export default App;
+const withProvider = () => (
+  <ThemeProvider theme={customTheme}>
+    <App />
+  </ThemeProvider>
+);
+
+export default withProvider;
