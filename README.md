@@ -8,16 +8,5 @@ Run Server:
 ./startLocal.sh
 ```
 
-Dev Front-End:
-
-```shell
-yarn start || npm run start
-```
-
-Build Front-End:
-
-```shell
-yarn build || npm run build
-```
-
-Is build to be served through in `/public/build/` this can be change through the `homepage` field in package.json
+On branch develop the Frontend is built and served with static files which is way friendlier for my Raspberry Pi Zero.
+On branch master a beautiful Frontend will be created with the help of react and Chakra.
