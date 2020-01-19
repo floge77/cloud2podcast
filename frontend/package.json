@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "browserify dev-index.js > dist/index.js && browserify dev-config.js > dist/config.js",
     "build": "browserify dev-index.js > dist/index.js && browserify dev-config.js > dist/config.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

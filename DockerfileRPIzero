@@ -3,12 +3,12 @@ FROM golang:alpine as builder
 # FROM arm32v6/golang:1.13.6-alpine3.10 as builder
 
 RUN adduser -D -g '' cloud2podcast
-RUN apk update && apk add git
+RUN apk update && apk add --update nodejs npm git
 
 WORKDIR /cloud2podcast
 COPY . .
 RUN CGO_ENABLED=0 GOARM=6 GOARCH=arm GOOS=linux go build -o /go/bin/cloud2podcast
-RUN cd frontend && npm install
+RUN cd frontend && npm install && npm run build
 
 # Build small sratch image
 FROM scratch
