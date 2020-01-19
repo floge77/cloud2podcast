@@ -31,6 +31,8 @@ func Run() {
 
 	router := mux.NewRouter()
 
+	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("frontend/"))))
+	router.PathPrefix("/downloads/").Handler(http.StripPrefix("/downloads/", http.FileServer(http.Dir(downloadDirectory+"/"))))
 	ServeAllPodcasts(router, configYamlPath, downloadDirectory+"/", port)
 	ServePodcastInfo(router, configYamlPath)
 	router.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
