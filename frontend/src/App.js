@@ -3,12 +3,13 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { ThemeProvider } from "@chakra-ui/core";
 import customTheme from "./theme";
+
 import Menu from "./components/Menu";
+import Home from "./components/Home";
 
 console.log(customTheme);
 
 // Dummys
-const Home = () => "Home";
 const Config = () => "Config";
 
 function App() {
@@ -17,7 +18,9 @@ function App() {
       <Menu />
 
       <Switch>
-        <Route exact path="/" children={Home} />
+        <Route exact path="/">
+          <Home />
+        </Route>
         <Route path="/config" children={Config} />
       </Switch>
     </Router>
