@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// Run runs the app
 func Run() {
 
 	configYamlPath := os.Getenv("configYaml")
@@ -30,18 +31,18 @@ func Run() {
 
 	router := mux.NewRouter()
 
-	router.PathPrefix("/").Handler(http.FileServer(http.Dir("frontend/")))
-	router.PathPrefix("/downloads/").Handler(http.StripPrefix("/downloads/", http.FileServer(http.Dir(downloadDirectory+"/"))))
 	ServeAllPodcasts(router, configYamlPath, downloadDirectory+"/", port)
 	ServePodcastInfo(router, configYamlPath)
 	router.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "pong")
 	})
 
+	router.PathPrefix("/downloads/").Handler(http.StripPrefix("/downloads/", http.FileServer(http.Dir(downloadDirectory+"/"))))
+	router.PathPrefix("/").Handler(http.FileServer(http.Dir("./frontend")))
+
 	server := &http.Server{
-		Handler: router,
-		Addr:    ":" + "8080",
-		// Good practice: enforce timeouts for servers you create!
+		Handler:      router,
+		Addr:         ":" + "8080",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}

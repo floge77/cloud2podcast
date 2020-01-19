@@ -16,19 +16,20 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// ServeAllPodcasts serves all podcasts the app can find in the given downloadDir
 func ServeAllPodcasts(router *mux.Router, configYamlPath string, downloadDirectory string, port string) {
-	yamlReader := fileUtils.YamlReader{}
-	config := yamlReader.GetConfig(configYamlPath)
+	yamlUtil := fileUtils.YamlUtil{}
+	config := yamlUtil.GetConfig(configYamlPath)
 
 	dirs, err := ioutil.ReadDir(downloadDirectory)
 	if err != nil {
-		log.Fatalf("Could not read %v. Error: %v", downloadDirectory, err)
+		log.Printf("Could not read %v. Error: %v", downloadDirectory, err)
 	}
 	for _, dir := range dirs {
 		if dir.IsDir() {
 			fmt.Println("Serving Podcast: " + dir.Name())
 
-			podcastInfo := &model.PodcastInfo{
+			podcastInfo := &model.Podcast{
 				Channel: dir.Name(),
 			}
 			addConfigInfo(podcastInfo, config, dir.Name())
@@ -42,7 +43,7 @@ func ServeAllPodcasts(router *mux.Router, configYamlPath string, downloadDirecto
 	router.HandleFunc("/availablePodcasts", handleAvailablePodcasts(dirs)).Methods("GET")
 }
 
-func addConfigInfo(podcastInfo *model.PodcastInfo, config *model.PodcastConfigYaml, dir string) {
+func addConfigInfo(podcastInfo *model.Podcast, config *model.ConfigYaml, dir string) {
 	for _, podcast := range config.Podcasts {
 		if podcast.Channel == dir {
 			podcastInfo.ChannelURL = podcast.ChannelURL
@@ -52,7 +53,7 @@ func addConfigInfo(podcastInfo *model.PodcastInfo, config *model.PodcastConfigYa
 	}
 }
 
-func addAllPodcastItemsToPodcastFeed(podcastInfo *model.PodcastInfo, config *model.PodcastConfigYaml, downloadDirectory string, dir string) {
+func addAllPodcastItemsToPodcastFeed(podcastInfo *model.Podcast, config *model.ConfigYaml, downloadDirectory string, dir string) {
 	var err error
 	fileReader := fileUtils.FileInfoExtractor{}
 	podcastInfo.Items, err = fileReader.GetPodcastItemsInformationForDir(downloadDirectory + dir)
@@ -61,7 +62,7 @@ func addAllPodcastItemsToPodcastFeed(podcastInfo *model.PodcastInfo, config *mod
 	}
 }
 
-func getInitializedPodcast(podcastInfo *model.PodcastInfo) *podcast.Podcast {
+func getInitializedPodcast(podcastInfo *model.Podcast) *podcast.Podcast {
 	channel := podcastInfo.Channel
 	imageURL := podcastInfo.ChannelImageURL
 	title := channel + "-Podcast"
@@ -81,7 +82,7 @@ func getInitializedPodcast(podcastInfo *model.PodcastInfo) *podcast.Podcast {
 	return &p
 }
 
-func buildPodcastFeed(podcastInfo *model.PodcastInfo, port string, dir string) *podcast.Podcast {
+func buildPodcastFeed(podcastInfo *model.Podcast, port string, dir string) *podcast.Podcast {
 	podcastToServe := getInitializedPodcast(podcastInfo)
 	// hostName := os.Hostname()
 	hostIP := os.Getenv("HOST_IP")

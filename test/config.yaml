@@ -1,0 +1,19 @@
+minLength: 1800
+
+podcasts:
+  - channelName: "Q-Dance-Youtube"
+    channelURL: "https://www.youtube.com/user/Qdancedotnl"
+    channelImageURL: "https://yt3.ggpht.com/a-/AN66SAzyW12uAQRayPY4MS_Fo_Wlj6PFjyNfx3X7CQ=s288-mo-c-c0xffffffff-rj-k-no"
+    playlistToDownloadURL: "https://www.youtube.com/user/Qdancedotnl/videos"
+  - channelName: "Q-Dance-Mixcloud"
+    channelURL: "https://mixcloud.com/Q-Dance"
+    channelImageURL: "https://thumbnailer.mixcloud.com/unsafe/320x320/profile/d/a/8/8/7f54-2819-4c09-9d74-475a2771a834"
+    playlistToDownloadURL: https://mixcloud.com/Q-Dance
+  - channelName: "B2S-Youtube"
+    channelURL: "https://www.youtube.com/user/officialb2s"
+    channelImageURL: "https://yt3.ggpht.com/a-/AN66SAzOHiotaZ20EWS6f9SHfzDPHQeAR_gyn-ng9w=s288-mo-c-c0xffffffff-rj-k-no"
+    playlistToDownloadURL: "https://www.youtube.com/user/officialb2s/videos"
+  - channelName: "Art-of-Dance-Youtube"
+    channelURL: "https://www.youtube.com/user/officialartofdance"
+    channelImageURL: "https://yt3.ggpht.com/a/AGF-l79pcH8ynFLsFDpJ7pn1RWs6wMAXWfQY5OLlXQ=s288-c-k-c0xffffffff-no-rj-mo"
+    playlistToDownloadURL: "https://www.youtube.com/user/officialartofdance/videos"
