@@ -1,24 +1,28 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { ThemeProvider } from "@chakra-ui/core";
 import customTheme from "./theme";
+import Menu from "./components/Menu";
+
+console.log(customTheme);
+
+// Dummys
+const Home = () => "Home";
+const Config = () => "Config";
 
 function App() {
   return (
     <Router>
-      {/* Menu */}
+      <Menu />
+
       <Switch>
-        <Route path="/" children={Home} />
+        <Route exact path="/" children={Home} />
         <Route path="/config" children={Config} />
       </Switch>
     </Router>
   );
 }
-
-// Dummys
-const Home = () => "Home";
-const Config = () => "Config";
 
 const withProvider = () => (
   <ThemeProvider theme={customTheme}>
