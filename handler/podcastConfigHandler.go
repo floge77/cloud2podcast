@@ -53,7 +53,6 @@ func handleAddPodcastInfo(router *mux.Router, configYamlPath string) {
 		defer r.Body.Close()
 		configYaml.Podcasts = append(configYaml.Podcasts, &podcast)
 		yamlUtil.WriteConfig(configYaml, configYamlPath)
-
 		w.WriteHeader(http.StatusOK)
 	}).Methods("POST")
 }

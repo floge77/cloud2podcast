@@ -16,10 +16,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// ServeAllPodcasts serves all podcasts the app can find in the given downloadDir
+//ServeAllPodcasts serves all podcasts the app can find in the given downloadDir
 func ServeAllPodcasts(router *mux.Router, configYamlPath string, downloadDirectory string, port string) {
-	yamlUtil := fileUtils.YamlUtil{}
-	config := yamlUtil.GetConfig(configYamlPath)
 
 	dirs, err := ioutil.ReadDir(downloadDirectory)
 	if err != nil {
@@ -29,14 +27,7 @@ func ServeAllPodcasts(router *mux.Router, configYamlPath string, downloadDirecto
 		if dir.IsDir() {
 			fmt.Println("Serving Podcast: " + dir.Name())
 
-			podcastInfo := &model.Podcast{
-				Channel: dir.Name(),
-			}
-			addConfigInfo(podcastInfo, config, dir.Name())
-			addAllPodcastItemsToPodcastFeed(podcastInfo, config, downloadDirectory, dir.Name())
-			podcastFeed := buildPodcastFeed(podcastInfo, port, dir.Name())
-
-			handlerFunc := handleSinglePodcast(podcastFeed)
+			handlerFunc := handleSinglePodcast(configYamlPath, dir.Name(), port, downloadDirectory)
 			router.HandleFunc("/podcasts/"+dir.Name(), handlerFunc).Methods("GET")
 		}
 	}
@@ -121,11 +112,21 @@ func appendPodcastItem(podcastToAppend *podcast.Podcast, itemToAdd *model.Podcas
 	}
 }
 
-func handleSinglePodcast(podcast *podcast.Podcast) func(http.ResponseWriter, *http.Request) {
+func handleSinglePodcast(configYamlPath, dir, port, downloadDirectory string) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
+		yamlUtil := fileUtils.YamlUtil{}
+		config := yamlUtil.GetConfig(configYamlPath)
+
+		podcastInfo := &model.Podcast{
+			Channel: dir,
+		}
+		addConfigInfo(podcastInfo, config, dir)
+		addAllPodcastItemsToPodcastFeed(podcastInfo, config, downloadDirectory, dir)
+		podcastFeed := buildPodcastFeed(podcastInfo, port, dir)
+
 		w.Header().Set("Content-Type", "application/xml")
 
-		if err := podcast.Encode(w); err != nil {
+		if err := podcastFeed.Encode(w); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	}
