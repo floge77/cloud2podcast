@@ -1,6 +1,4 @@
-FROM golang:alpine as builder
-# use to build on a raspberry
-# FROM arm32v6/golang:1.13.6-alpine3.10 as builder
+FROM golang:1.13.8-alpine3.11 as builder
 
 RUN adduser -D -g '' cloud2podcast
 RUN apk update && apk add --update nodejs npm git

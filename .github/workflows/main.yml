@@ -1,10 +1,12 @@
-name: Publish Docker for Raspberry PI
+name: Publish Docker Images
 on:
   push:
     branches:
-      - develop
+      - master
+  schedule:
+    - cron: "0 0 * * 5"
 jobs:
-  build:
+  build-ubuntu:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -22,3 +24,22 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           dockerfile: Dockerfile
+  build-rpi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@master
+      - name: Setup buildx
+        uses: crazy-max/ghaction-docker-buildx@v1
+        with:
+          version: latest
+      - name: Login to dockerhub
+        run: |
+           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login docker.io -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Build and Push docker image for rpi zero
+        run: |
+          docker buildx build \
+            --platform linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/s390x \
+            --output "type=image,push=true" \
+            --tag floge77/cloud2podcastpi \
+            --file DockerfileRPIzero .
