@@ -1,5 +1,7 @@
 # Could2Podcast
 
+**deprecated** Use [PodcastMaker](https://github.com/floge77/PodcastMaker) instead!
+
 ## Development
 
 Run Server:
